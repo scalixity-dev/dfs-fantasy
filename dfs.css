@@ -519,7 +519,13 @@ footer { background: var(--bg-2); border-top: 1px solid var(--line); padding: 72
   .hero h1 .row { white-space: normal; }
   .hero p.lead { font-size: 16px; margin: 18px 0 26px; }
   .hero-cta .btn { flex: 1 1 auto; justify-content: center; }
-  .hero-visual { height: 470px; }
+  /* shape the app-preview container to the phone's own aspect ratio so the
+     embedded device scales to a clean, centered phone instead of a clipped
+     frame floating in empty space */
+  .hero-visual {
+    order: 2; height: auto; width: min(76%, 290px);
+    margin: 4px auto 0; aspect-ratio: 402 / 874;
+  }
   .float-coin { display: none; }
   .stats { gap: 20px 28px; margin-top: 30px; padding-top: 22px; }
   .stat .n { font-size: 30px; }
@@ -531,8 +537,11 @@ footer { background: var(--bg-2); border-top: 1px solid var(--line); padding: 72
   .nav-links .nav-cta { display: inline-flex; justify-content: center; margin: 10px 24px 12px; }
   .lm-head { flex-wrap: wrap; gap: 14px; }
   .lm-head .btn-ghost { width: 100%; justify-content: center; }
-  .promo-visual { height: 470px; }
-  .promo-visual .freebadge { font-size: 30px; }
+  .promo-visual {
+    height: auto; width: min(76%, 290px);
+    margin: 8px auto 0; aspect-ratio: 402 / 874;
+  }
+  .promo-visual .freebadge { font-size: 26px; right: 0; top: 24%; }
   .foot-grid { grid-template-columns: 1fr; }
   .news { flex-direction: column; align-items: flex-start; }
   .news-form { width: 100%; }
