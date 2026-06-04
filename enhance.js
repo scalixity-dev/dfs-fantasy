@@ -88,6 +88,34 @@
     markLoaded();
   }
 
+  /* ---------- mobile drawer nav ----------
+     The hamburger toggles a slide-down panel (.nav-links.open). Closes on
+     link tap, Escape, or when the viewport grows back past the breakpoint. */
+  (function navDrawer() {
+    var toggle = document.querySelector(".nav-toggle");
+    var links = document.getElementById("navLinks");
+    if (!toggle || !links) return;
+
+    function setOpen(open) {
+      links.classList.toggle("open", open);
+      toggle.classList.toggle("open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    }
+    toggle.addEventListener("click", function () {
+      setOpen(!links.classList.contains("open"));
+    });
+    links.addEventListener("click", function (e) {
+      if (e.target.closest("a")) setOpen(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") setOpen(false);
+    });
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900) setOpen(false);
+    });
+  })();
+
   /* ---------- scroll-reveal with stagger ---------- */
   // Tag elements as reveal targets without editing the exported HTML.
   // [selector, staggerStepMs] — children of a group get incremental delay.
