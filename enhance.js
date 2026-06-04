@@ -53,6 +53,15 @@
     });
   });
 
+  /* ---------- tag cursor-spotlight cards ---------- */
+  // photo cards glow above the image; text cards glow behind content
+  document.querySelectorAll(".sport-card").forEach(function (el) {
+    el.classList.add("spot-fill");
+  });
+  document.querySelectorAll(".pick-card, .step, .play").forEach(function (el) {
+    el.classList.add("spot-soft");
+  });
+
   if (reduced || !("IntersectionObserver" in window)) {
     revealEls.forEach(function (el) { el.classList.add("in"); });
   } else {
@@ -172,4 +181,68 @@
     if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
   }, { passive: true });
   onScroll();
+
+  /* ---------- pointer-driven micro-interactions ----------
+     Skipped on touch (pointer: coarse) and under reduced motion. */
+  var fine = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
+  if (!reduced && fine) {
+
+    // cursor spotlight — one delegated listener feeds --mx/--my to the card
+    var spotSel = ".spot-fill, .spot-soft";
+    var spotRaf = false, spotLast = null;
+    document.addEventListener("pointermove", function (e) {
+      var card = e.target && e.target.closest && e.target.closest(spotSel);
+      if (!card) return;
+      spotLast = { card: card, x: e.clientX, y: e.clientY };
+      if (spotRaf) return;
+      spotRaf = true;
+      requestAnimationFrame(function () {
+        spotRaf = false;
+        if (!spotLast) return;
+        var r = spotLast.card.getBoundingClientRect();
+        spotLast.card.style.setProperty("--mx", (spotLast.x - r.left) + "px");
+        spotLast.card.style.setProperty("--my", (spotLast.y - r.top) + "px");
+      });
+    }, { passive: true });
+
+    // magnetic primary CTAs — gently pull toward the cursor, spring back on leave
+    document.querySelectorAll(".btn-lime").forEach(function (btn) {
+      var raf = false, ev = null;
+      btn.addEventListener("pointermove", function (e) {
+        ev = e;
+        if (raf) return;
+        raf = true;
+        requestAnimationFrame(function () {
+          raf = false;
+          var r = btn.getBoundingClientRect();
+          var dx = (ev.clientX - (r.left + r.width / 2)) / (r.width / 2);
+          var dy = (ev.clientY - (r.top + r.height / 2)) / (r.height / 2);
+          btn.style.transform = "translate(" + (dx * 6).toFixed(1) + "px," + (dy * 5).toFixed(1) + "px)";
+        });
+      });
+      btn.addEventListener("pointerleave", function () { btn.style.transform = ""; });
+    });
+
+    // hero 3D tilt — the phone preview leans toward the cursor
+    var hero = document.querySelector(".hero");
+    var hv = document.querySelector(".hero-visual");
+    if (hero && hv) {
+      var tRaf = false, tEv = null;
+      hero.addEventListener("pointermove", function (e) {
+        tEv = e;
+        if (tRaf) return;
+        tRaf = true;
+        requestAnimationFrame(function () {
+          tRaf = false;
+          var r = hero.getBoundingClientRect();
+          var nx = (tEv.clientX - (r.left + r.width / 2)) / (r.width / 2);
+          var ny = (tEv.clientY - (r.top + r.height / 2)) / (r.height / 2);
+          hv.style.transform =
+            "perspective(1000px) rotateY(" + (nx * 5).toFixed(2) +
+            "deg) rotateX(" + (-ny * 5).toFixed(2) + "deg)";
+        });
+      });
+      hero.addEventListener("pointerleave", function () { hv.style.transform = ""; });
+    }
+  }
 })();

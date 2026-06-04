@@ -101,3 +101,80 @@ section[id], header[id] { scroll-margin-top: 96px; }
 .step:hover { transform: translateY(-5px); border-color: rgba(43,205,211,0.4); }
 .play:not(.feat):hover { transform: translateY(-5px); border-color: rgba(43,205,211,0.4); }
 
+/* ============================================================
+   v2 — researched micro-interactions (2025/26): cursor spotlight,
+   magnetic CTAs, hero tilt, animated icons, headline sheen, ambient
+   hero aurora. JS sets --mx/--my; all motion gated on reduced-motion.
+   ============================================================ */
+
+/* cursor spotlight — photo cards (glow above image, beneath the label) */
+.spot-fill { position: relative; }
+.spot-fill::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none; z-index: 1; opacity: 0; transition: opacity .3s ease;
+  background: radial-gradient(200px circle at var(--mx, 50%) var(--my, 50%),
+              rgba(43,205,211,0.22), transparent 60%);
+}
+.spot-fill:hover::before { opacity: 1; }
+
+/* cursor spotlight — text cards (glow behind content) */
+.spot-soft { position: relative; isolation: isolate; }
+.spot-soft::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none; z-index: 0; opacity: 0; transition: opacity .3s ease;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%),
+              rgba(43,205,211,0.14), transparent 55%);
+}
+.spot-soft:hover::before { opacity: 1; }
+.spot-soft > * { position: relative; z-index: 1; }
+
+/* animated step icon on hover */
+.step .ic { transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+.step:hover .ic { transform: scale(1.18) rotate(-8deg); }
+
+/* keep hero content above the ambient aurora layer below */
+.hero-grid { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* snappier transform on the hero visual so the 3D tilt tracks the cursor */
+  html.js body.loaded .hero-visual {
+    transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .2s ease;
+    transform-style: preserve-3d; will-change: transform;
+  }
+
+  /* ambient hero aurora — slow drifting glow */
+  .hero::after {
+    content: ""; position: absolute; inset: -20%; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(40% 40% at 28% 32%, rgba(43,205,211,0.12), transparent 70%),
+      radial-gradient(34% 34% at 76% 62%, rgba(43,205,211,0.08), transparent 70%);
+    filter: blur(8px);
+    animation: aurora 20s ease-in-out infinite alternate;
+  }
+  @keyframes aurora { to { transform: translate3d(5%, -4%, 0) scale(1.12); } }
+
+  /* breathing glow on the featured Power Play card */
+  .play.feat { animation: featGlow 3.2s ease-in-out infinite; }
+  @keyframes featGlow {
+    50% { box-shadow: 0 0 0 1px var(--lime), 0 26px 64px -20px var(--lime-glow); }
+  }
+}
+
+/* animated sheen across the cyan headline (guarded: text-clip support only) */
+/* animated sheen across the cyan headline — applied to the .italic span that
+   actually holds the glyphs (clipping the parent .row.lime would leave an
+   empty text region and render the line invisible). */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero h1 .row.lime .italic {
+      background: linear-gradient(100deg,
+        var(--lime) 0%, var(--lime) 38%, #eafffe 50%, var(--lime) 62%, var(--lime) 100%);
+      background-size: 250% 100%;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+      animation: sheen 7s linear infinite;
+    }
+    @keyframes sheen { to { background-position: -250% 0; } }
+  }
+}
+
