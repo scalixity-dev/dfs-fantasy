@@ -12,6 +12,66 @@
   var reduced = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ---------- branded preloader ----------
+     Shows DFS branding + a live progress %, then curtain-wipes away.
+     - Faux progress eases to 90%, snaps to 100% once ready.
+     - "ready" = window load OR a hard cap, so the CDN-loaded hero iframe
+       never holds the loader hostage.
+     - Minimum on-screen time prevents a jarring flash on fast loads.
+     - Once per session (so returning from the app doesn't re-show it).
+     - Skipped entirely under reduced motion. */
+  (function loader() {
+    var el = document.getElementById("dfs-loader");
+    if (!el) return;
+    var fill = el.querySelector(".dl-fill");
+    var pct = el.querySelector(".dl-pct");
+    var now = function () {
+      return window.performance && performance.now ? performance.now() : Date.now();
+    };
+
+    function remove() { if (el && el.parentNode) el.parentNode.removeChild(el); }
+
+    var seen = false;
+    try { seen = sessionStorage.getItem("dfsLoaded") === "1"; } catch (e) {}
+    if (seen || reduced) { remove(); return; }      // no preloader on repeat visits / reduced motion
+    try { sessionStorage.setItem("dfsLoaded", "1"); } catch (e) {}
+
+    var start = now(), MIN = 750, CAP = 1900;
+    var ready = false, done = false, p = 0;
+
+    (function tick() {
+      if (ready) return;
+      p += (90 - p) * 0.06 + 0.5;          // ease toward 90%
+      if (p > 90) p = 90;
+      if (fill) fill.style.width = p.toFixed(0) + "%";
+      if (pct) pct.textContent = Math.round(p) + "%";
+      requestAnimationFrame(tick);
+    })();
+
+    function finish() {
+      if (done) return; done = true;
+      if (fill) fill.style.width = "100%";
+      if (pct) pct.textContent = "100%";
+      // brief beat at 100%, then curtain up
+      setTimeout(function () {
+        el.classList.add("out");
+        var gone = false, go = function () { if (gone) return; gone = true; remove(); };
+        el.addEventListener("transitionend", function (e) {
+          if (e.propertyName === "transform") go();
+        });
+        setTimeout(go, 1000); // fail-safe if transitionend doesn't fire
+      }, 180);
+    }
+
+    function onReady() {
+      if (ready) return; ready = true;
+      setTimeout(finish, Math.max(0, MIN - (now() - start)));
+    }
+    if (document.readyState === "complete") onReady();
+    else window.addEventListener("load", onReady);
+    setTimeout(onReady, CAP);
+  })();
+
   /* ---------- hero entrance ----------
      Fire as soon as the DOM is ready — NOT on window.load, which would
      wait for the hero iframe (it pulls React/Babel from a CDN) and leave

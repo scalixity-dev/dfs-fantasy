@@ -9,8 +9,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="dfs.css">
 <link rel="stylesheet" href="enhance.css">
+<!-- critical preloader styles: inlined so the cover paints instantly, with a
+     CSS fail-safe (auto-hide after 4s) so JS failure can never trap the site -->
+<style>
+  #dfs-loader{position:fixed;inset:0;z-index:9999;background:#090a0b;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .7s cubic-bezier(.7,0,.25,1);will-change:transform}
+  #dfs-loader.out{transform:translateY(-100%)}
+  @keyframes dfsLoaderFailsafe{to{opacity:0;visibility:hidden}}
+  #dfs-loader{animation:dfsLoaderFailsafe 0s linear 4s forwards}
+</style>
+<noscript><style>#dfs-loader{display:none}</style></noscript>
 </head>
 <body>
+
+<!-- ============ PRELOADER ============ -->
+<div id="dfs-loader" role="status" aria-live="polite" aria-label="Loading DFS">
+  <div class="dl-inner">
+    <div class="dl-brand"><span class="dl-badge">D</span><span class="dl-word">DFS</span></div>
+    <div class="dl-bar"><span class="dl-fill"></span></div>
+    <div class="dl-pct">0%</div>
+    <div class="dl-tag">More or Less. Win Real Prizes.</div>
+  </div>
+</div>
 
 <!-- ============ TICKER ============ -->
 <div class="ticker">

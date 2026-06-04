@@ -178,3 +178,61 @@ section[id], header[id] { scroll-margin-top: 96px; }
   }
 }
 
+/* ============================================================
+   BRANDED PRELOADER — badge + wordmark reveal, cyan progress
+   bar with live %, then a curtain-wipe exit (transform is in the
+   inlined critical CSS). Entrance motion gated on reduced-motion.
+   ============================================================ */
+#dfs-loader .dl-inner {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 24px;
+}
+#dfs-loader .dl-brand {
+  display: inline-flex; align-items: center; gap: 14px; margin-bottom: 26px;
+}
+#dfs-loader .dl-badge {
+  position: relative; width: 56px; height: 56px; border-radius: 16px;
+  background: var(--lime); color: #04211f;
+  font-family: var(--display); font-size: 29px;
+  display: grid; place-items: center;
+  box-shadow: 0 0 36px -4px var(--lime-glow);
+}
+#dfs-loader .dl-word {
+  font-family: var(--display); font-size: 46px; letter-spacing: 0.04em; color: var(--ink);
+}
+#dfs-loader .dl-bar {
+  width: 220px; max-width: 60vw; height: 4px; border-radius: 99px;
+  background: rgba(255,255,255,0.1); overflow: hidden;
+}
+#dfs-loader .dl-fill {
+  display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--lime), #eafffe);
+  box-shadow: 0 0 12px -1px var(--lime-glow);
+  transition: width .2s ease;
+}
+#dfs-loader .dl-pct {
+  margin-top: 13px; font-family: var(--display); font-size: 14px;
+  letter-spacing: 0.18em; color: var(--lime); font-variant-numeric: tabular-nums;
+}
+#dfs-loader .dl-tag {
+  margin-top: 9px; font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ink-3); font-weight: 700;
+}
+#dfs-loader.out .dl-inner { opacity: 0; transition: opacity .35s ease; }
+
+@media (prefers-reduced-motion: no-preference) {
+  #dfs-loader .dl-badge { animation: dlBadge .6s cubic-bezier(.2,1.3,.4,1) both; }
+  #dfs-loader .dl-badge::after {
+    content: ""; position: absolute; inset: 0; border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.35);
+    animation: dlPulse 1.7s ease-out infinite;
+  }
+  #dfs-loader .dl-word {
+    clip-path: inset(0 100% 0 0);
+    animation: dlWord .6s cubic-bezier(.4,0,.2,1) .25s forwards;
+  }
+}
+@keyframes dlBadge { from { opacity: 0; transform: scale(.4) rotate(-12deg); } to { opacity: 1; transform: none; } }
+@keyframes dlWord  { to { clip-path: inset(0 0 0 0); } }
+@keyframes dlPulse { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(1.65); opacity: 0; } }
+
