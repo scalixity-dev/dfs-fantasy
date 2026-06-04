@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DFS — Live Betting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dfs.css">
+<link rel="stylesheet" href="live.css">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="wrap nav-inner" style="max-width:1640px">
+    <a class="brand" href="DFS.html">
+      <span class="brand-badge">D</span>
+      <span class="brand-word">DFS</span>
+    </a>
+    <div class="nav-links">
+      <a href="DFS.html">Sports</a>
+      <a href="Live Betting.html" class="active">Live Betting</a>
+      <a href="#">Casino</a>
+      <a href="#">Promotions</a>
+      <a href="#">VIP Club</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" class="nav-login">Login</a>
+      <a href="#" class="btn btn-lime">Sign Up</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ APP SHELL ============ -->
+<main class="app" id="betSlip">
+
+  <!-- ===== LEFT RAIL ===== -->
+  <aside class="rail left">
+    <div class="rail-head">
+      <h2>Live Betting</h2>
+      <button class="filt" aria-label="Filter">⋚</button>
+    </div>
+    <div class="select"><span>All Sports</span><span class="chev">›</span></div>
+    <div class="select lime-count"><span>Football</span><span class="c">45 ⌄</span></div>
+
+    <div class="rail-match active">
+      <div class="lg"><span class="livedot"></span> Saudi Pro League</div>
+      <div class="row"><span>Al-Ittihad FC</span><span class="sc">2</span></div>
+      <div class="row"><span>Al-Nassr FC</span><span class="sc">1</span></div>
+      <div class="foot"><span class="min2">● 67'</span><span class="odds" data-id="rl0" data-name="Al-Ittihad FC" data-mkt="Live · Win" data-odd="2.10" onclick="addBet(this)">2.10</span></div>
+    </div>
+    <div class="rail-match">
+      <div class="lg"><span class="livedot"></span> La Liga</div>
+      <div class="row"><span>Real Madrid</span><span class="sc">1</span></div>
+      <div class="row"><span>Barcelona</span><span class="sc">1</span></div>
+      <div class="foot"><span class="min2">● 54'</span><span class="odds" data-id="rl1" data-name="Real Madrid" data-mkt="Live · Win" data-odd="2.15" onclick="addBet(this)">2.15</span></div>
+    </div>
+    <div class="rail-match">
+      <div class="lg"><span class="livedot"></span> Premier League</div>
+      <div class="row"><span>Liverpool</span><span class="sc">2</span></div>
+      <div class="row"><span>Man City</span><span class="sc">0</span></div>
+      <div class="foot"><span class="min2">● 38'</span><span class="odds" data-id="rl2" data-name="Liverpool" data-mkt="Live · Win" data-odd="1.95" onclick="addBet(this)">1.95</span></div>
+    </div>
+    <div class="rail-match">
+      <div class="lg"><span class="livedot"></span> Bundesliga</div>
+      <div class="row"><span>Bayern Munich</span><span class="sc">3</span></div>
+      <div class="row"><span>Dortmund</span><span class="sc">0</span></div>
+      <div class="foot"><span class="min2">● 82'</span><span class="odds" data-id="rl3" data-name="Bayern Munich" data-mkt="Live · Win" data-odd="1.40" onclick="addBet(this)">1.40</span></div>
+    </div>
+
+    <div class="promo-card">
+      <div class="pc-eye">Real Money Mode</div>
+      <h3>Win Bigger Prizes</h3>
+      <p>Start playing with real money and unlock the full board.</p>
+      <div class="trophy">🏆</div>
+      <div class="bonus">Up to $500 Bonus</div>
+      <a href="#" class="btn btn-lime" style="width:100%;justify-content:center">Deposit Now</a>
+    </div>
+  </aside>
+
+  <!-- ===== CENTER ===== -->
+  <section class="center">
+    <div class="live-hero">
+      <image-slot id="live-stadium" class="bgslot" shape="rect" placeholder="Drop a stadium / match photo"></image-slot>
+      <div class="lh-top">
+        <span class="lh-live"><span class="livedot"></span> LIVE</span>
+        <span class="lh-league">Saudi Pro League</span>
+      </div>
+      <div class="lh-body">
+        <div class="lh-team">
+          <div class="lh-crest" style="background:linear-gradient(150deg,#f5d442,#caa617);color:#0a0a0a;border-color:rgba(245,212,66,.6)">IT</div>
+          <div class="nm">Al-Ittihad FC</div>
+          <div class="poss">47% Possession</div>
+        </div>
+        <div class="lh-score">
+          <div class="s">2 — 1</div>
+          <div class="clock">67' · 2nd Half</div>
+        </div>
+        <div class="lh-team">
+          <div class="lh-crest" style="background:linear-gradient(150deg,#3a7bd5,#1b3a78);border-color:rgba(58,123,213,.6)">NS</div>
+          <div class="nm">Al-Nassr FC</div>
+          <div class="poss">53% Possession</div>
+        </div>
+      </div>
+      <div class="lh-poss">
+        <div class="labels"><span>47%</span><span class="mid">Ball Possession</span><span>53%</span></div>
+        <div class="poss-bar"><div class="home" style="width:47%"></div><div class="away" style="width:53%"></div></div>
+      </div>
+    </div>
+
+    <div class="mkt-tabs">
+      <button class="mkt-tab">1st Half</button>
+      <button class="mkt-tab active">Match</button>
+    </div>
+
+    <div class="mkt-list" id="mktList"></div>
+  </section>
+
+  <!-- ===== RIGHT RAIL ===== -->
+  <aside class="rail right">
+    <div class="panel">
+      <div class="slip-head">
+        <h3>Bet Slip <span class="badge" id="slipCount">0</span></h3>
+        <button class="clr" aria-label="Clear">🗑</button>
+      </div>
+      <div class="slip-body" id="slipBody"></div>
+      <div class="slip-stake" id="slipStake">
+        <div class="stake-row"><span>Combined Odds</span><b id="combinedOdds">1.00</b></div>
+        <input class="stake-input" id="stakeInput" type="number" value="25" min="0" aria-label="Stake">
+        <div class="quick">
+          <button data-quick="10">$10</button>
+          <button data-quick="25">$25</button>
+          <button data-quick="50">$50</button>
+          <button data-quick="100">$100</button>
+        </div>
+        <div class="payout-row"><span class="pl">Potential Payout</span><span class="pv" id="slipPayout">$0.00</span></div>
+        <button class="btn btn-lime place">Place Bet →</button>
+      </div>
+    </div>
+
+    <div class="side-block">
+      <h4>Notifications</h4>
+      <div class="notif"><div><div class="nx">Your bet on Liverpool won!</div><div class="nt">2m ago</div></div><div class="amt pos">+$125.50</div></div>
+      <div class="notif"><div><div class="nx">Match starting in 5 minutes</div><div class="nt">8m ago</div></div></div>
+      <div class="notif"><div><div class="nx">Bonus credited to account</div><div class="nt">1h ago</div></div><div class="amt pos">+$50.00</div></div>
+    </div>
+
+    <div class="side-block">
+      <h4>Leaderboard</h4>
+      <div class="lb-row"><span class="rk g1">1</span><div class="who"><div class="nm">JohnDoe</div><div class="wn">42 wins</div></div><span class="cash">$2,450</span></div>
+      <div class="lb-row"><span class="rk">2</span><div class="who"><div class="nm">BetMaster</div><div class="wn">38 wins</div></div><span class="cash">$2,100</span></div>
+      <div class="lb-row"><span class="rk">3</span><div class="who"><div class="nm">LuckyBet</div><div class="wn">35 wins</div></div><span class="cash">$1,850</span></div>
+      <div class="lb-row"><span class="rk">4</span><div class="who"><div class="nm">ProPlayer</div><div class="wn">32 wins</div></div><span class="cash">$1,600</span></div>
+      <div class="lb-row" style="border-bottom:none"><span class="rk">5</span><div class="who"><div class="nm">WinStreak</div><div class="wn">30 wins</div></div><span class="cash">$1,450</span></div>
+    </div>
+  </aside>
+
+</main>
+
+<script src="image-slot.js"></script>
+<script>
+  /* market list for the live match */
+  (function () {
+    const markets = [
+      ["Match Winner", [["1", "2.10"], ["X", "3.40"], ["2", "3.20"]]],
+      ["Double Chance", [["1X", "1.25"], ["12", "1.50"], ["X2", "1.45"]]],
+      ["Both Teams To Score", [["Yes", "1.85"], ["No", "1.95"]]],
+      ["Over / Under 2.5", [["Over", "2.05"], ["Under", "1.75"]]],
+      ["Asian Handicap", [["+0.5", "1.90"], ["-0.5", "1.90"]]],
+      ["Next Goal", [["Ittihad", "2.30"], ["None", "5.50"], ["Nassr", "2.60"]]],
+    ];
+    const el = document.getElementById("mktList");
+    el.innerHTML = markets
+      .map((m, gi) => {
+        const odds = m[1]
+          .map(
+            (o, oi) =>
+              `<button class="mkt-odd" data-id="m${gi}-${oi}" data-name="${m[0]}" data-mkt="Al-Ittihad vs Al-Nassr · ${o[0]}" data-odd="${o[1]}" onclick="addBet(this)"><span class="tag">${o[0]}</span>${o[1]}</button>`
+          )
+          .join("");
+        return `<div class="mkt-group"><div class="lbl">${m[0]}</div><div class="mkt-odds">${odds}</div></div>`;
+      })
+      .join("");
+  })();
+</script>
+<script src="app.js"></script>
+</body>
+</html>
